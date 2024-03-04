@@ -1,0 +1,96 @@
+﻿<Window x:Class="Ru.Krdnet.StickyNotes.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:tb="clr-namespace:H.NotifyIcon;assembly=H.NotifyIcon.Wpf"
+        xmlns:local="clr-namespace:Ru.Krdnet.StickyNotes"
+        mc:Ignorable="d"
+        Title="Заметки" Height="400" Width="400" ResizeMode="CanResizeWithGrip" Background="#FFF8F7B7" FontFamily="Segoe Print" FontSize="20" Loaded="Window_Loaded" Closing="Window_Closing" LostFocus="NoteTextBox_LostFocus" ShowInTaskbar="False" SizeChanged="Window_SizeChanged" AllowsTransparency="True" WindowStyle="None" MouseEnter="Window_MouseEnter" MouseLeave="Window_MouseLeave" SnapsToDevicePixels="True" UseLayoutRounding="True">
+    <Window.Resources>
+        <Style x:Key="OpaqueBtn" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="Border" RenderTransformOrigin="0.5,0.5" CornerRadius="2" BorderThickness="1" Background="{x:Null}" BorderBrush="{x:Null}">
+                            <ContentPresenter  Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{x:Null}" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{x:Null}" />
+                            </Trigger>
+                            <Trigger Property="IsDefaulted" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{x:Null}" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{x:Null}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{x:Null}" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{x:Null}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{x:Null}" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{x:Null}" />
+                                <Setter Property="RenderTransform" TargetName="Border">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="0.95" ScaleY="0.95" />
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                                <Setter Property="Opacity" TargetName="Border" Value="0.5"/>
+                                <Setter Property="Opacity" TargetName="Border" Value="1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <local:ShowWindowCommand x:Key="ShowCommand" />
+    </Window.Resources>
+
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="35"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="Btn_Close" Margin="5" Style="{DynamicResource OpaqueBtn}" Click="CloseBtnClick" Cursor="Hand" HorizontalAlignment="Stretch" Width="25" Height="25" VerticalAlignment="Stretch" MouseEnter="BtnMouseEnter" MouseLeave="BtnMouseLeave" Background="{x:Null}" BorderBrush="{x:Null}" Focusable="False" Opacity="0" Grid.Column="1">
+            <TextBlock Margin="0" Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}" FontFamily="Segoe Print">X</TextBlock>
+        </Button>
+        <Label x:Name="NotesTitle" Margin="0" MouseLeftButtonDown="NotesTitle_MouseLeftButtonDown" VerticalContentAlignment="Center"></Label>
+        <TextBox x:Name="NoteTextBox" Padding="5" Margin="0" TextWrapping="Wrap" Text="Once uppon a time, in a galaxy far far away..." AcceptsReturn="True" VerticalScrollBarVisibility="Auto" LostFocus="NoteTextBox_LostFocus" TextChanged="NoteTextBox_TextChanged" PreviewKeyDown="NoteTextBox_PreviewKeyDown" BorderThickness="0" Grid.Row="1" Grid.ColumnSpan="2" >
+            <TextBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFFEFFC6" Offset="0"/>
+                    <GradientStop Color="#FFF8F7B7" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBox.Background>
+        </TextBox>
+
+        <tb:TaskbarIcon
+            x:Name="StickyNotifyIcon"
+            ToolTipText="Simple Sticky Notes"
+            IconSource="pack://application:,,,/notes.ico"
+            DoubleClickCommand="{StaticResource ShowCommand}">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="TopmostMenuItem"
+                        Header="Always On Top"
+                        Click="TopMostMenuItemClick" />
+                    <Separator />
+                    <MenuItem Header="About" Click="AboutMenuItemClick" />
+                    <Separator />
+                    <MenuItem Header="Exit" Click="ExitMenuItemClick" />
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+    </Grid>
+</Window>
