@@ -14,8 +14,12 @@ namespace Ru.Krdnet.StickyNotes
     {
         public MainWindow()
         {
+            MaxHeight = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - 200;
+            MaxWidth = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width - 200;
+
             GetMyNote();
             InitializeComponent();
+            NoteTextBox.Text = "";
         }
 
         bool isTextChanged { get; set; } = false;
@@ -95,10 +99,6 @@ namespace Ru.Krdnet.StickyNotes
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            MaxHeight = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - 200;
-            MaxWidth = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width - 200;
-            NoteTextBox.Text = "";
-            GetMyNote();
             Screen.CheckBounds(this);
 
             if (!Directory.Exists(App.SavePath)) Directory.CreateDirectory(App.SavePath);

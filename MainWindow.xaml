@@ -66,7 +66,7 @@
             <TextBlock Margin="0" Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}" FontFamily="Segoe Print">X</TextBlock>
         </Button>
         <Label x:Name="NotesTitle" Margin="0" MouseLeftButtonDown="NotesTitle_MouseLeftButtonDown" VerticalContentAlignment="Center"></Label>
-        <TextBox x:Name="NoteTextBox" Padding="5" Margin="0" TextWrapping="Wrap" Text="Once uppon a time, in a galaxy far far away..." AcceptsReturn="True" VerticalScrollBarVisibility="Auto" LostFocus="NoteTextBox_LostFocus" TextChanged="NoteTextBox_TextChanged" PreviewKeyDown="NoteTextBox_PreviewKeyDown" BorderThickness="0" Grid.Row="1" Grid.ColumnSpan="2" >
+        <TextBox x:Name="NoteTextBox" Padding="5" Margin="0" TextWrapping="Wrap" Text="Type something here to save..." AcceptsReturn="True" VerticalScrollBarVisibility="Auto" LostFocus="NoteTextBox_LostFocus" TextChanged="NoteTextBox_TextChanged" PreviewKeyDown="NoteTextBox_PreviewKeyDown" BorderThickness="0" Grid.Row="1" Grid.ColumnSpan="2" >
             <TextBox.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFFEFFC6" Offset="0"/>
