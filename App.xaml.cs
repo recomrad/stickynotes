@@ -34,6 +34,8 @@ namespace Ru.Krdnet.StickyNotes
         public static readonly string SavePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Recomrad");
         public static readonly string DebugFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Recomrad", "debug.log");
         public static readonly string SaveFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Recomrad", "StickyNote.save");
+        
+        public static string backupText { get; set; } = string.Empty;
 
         public static string backupText { get; set; } = string.Empty;
 
