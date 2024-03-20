@@ -6,10 +6,11 @@
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
-		<Deterministic>false</Deterministic>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<ApplicationIcon>notes.ico</ApplicationIcon>
 		<PublishSingleFile>true</PublishSingleFile>
+		<AssemblyName>StickyNotes</AssemblyName>
+		<AssemblyVersion>2024.3.20.15877</AssemblyVersion>
+		<FileVersion>2024.3.20.15877</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
