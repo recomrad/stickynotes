@@ -24,6 +24,8 @@ namespace Ru.Krdnet.StickyNotes
 
         bool isTextChanged { get; set; } = false;
 
+        bool isSizeChanged { get; set; } = false;
+
         bool isSaving { get; set; } = false;
 
         bool isLoading { get; set; } = false;
@@ -45,7 +47,7 @@ namespace Ru.Krdnet.StickyNotes
 
                     Note = JsonSerializer.Deserialize<StickyNote>(await File.ReadAllTextAsync(App.SaveFile)) ?? new();
 
-                    NoteTextBox.Text = Note.Text;
+                    App.backupText = NoteTextBox.Text = Note.Text;
                     Width = Note.Width.GetValueOrDefault(Width);
                     Height = Note.Height.GetValueOrDefault(Height);
                     Left = Note.intX.GetValueOrDefault(Left);
@@ -53,7 +55,7 @@ namespace Ru.Krdnet.StickyNotes
 
                 }
             }
-            catch { Note = new(); }
+            catch (Exception ex) { ShowErrorWindow(ex); Note = new() { Text = App.backupText }; }
             finally { isLoading = false; }
         }
 
@@ -68,22 +70,54 @@ namespace Ru.Krdnet.StickyNotes
             {
                 if (!Directory.Exists(App.SavePath)) Directory.CreateDirectory(App.SavePath);
 
-                Note.Width = Width;
-                Note.Height = Height;
+                if (Note.Width != Width)
+                {
+                    isSizeChanged = true;
+                    Note.Width = Width;
+                }
 
-                Note.intX = Left;
-                Note.intY = Top;
+                if (Note.Height != Height)
+                {
+                    isSizeChanged = true;
+                    Note.Height = Height;
+                }
+
+                if (Note.intX != Left)
+                {
+                    isSizeChanged = true;
+                    Note.intX = Left;
+                }
+
+                if (Note.intY != Top)
+                {
+                    isSizeChanged = true;
+                    Note.intY = Top;
+                }
+
+                if (Note.Topmost != Topmost)
+                {
+                    isSizeChanged = true;
+                    Note.Topmost = Topmost;
+                }
+
+                App.backupText = NoteTextBox.Text;
 
                 if (isTextChanged) Note.Text = NoteTextBox.Text;
 
                 Note.LastSaved = DateTime.Now;
 
-                Note.Topmost = Topmost;
+                if (isTextChanged || isSizeChanged)
+                {
+                    if (File.Exists(App.SaveFile + ".backup")) File.Delete(App.SaveFile + ".backup");
+                    File.Move(App.SaveFile, App.SaveFile + ".backup");
 
-                await File.WriteAllTextAsync(App.SaveFile, JsonSerializer.Serialize(Note));
+                    await File.WriteAllTextAsync(App.SaveFile, JsonSerializer.Serialize(Note));
+
+                    isSizeChanged = false; isTextChanged = false;
+                }
             }
             catch (Exception ex) { ShowErrorWindow(ex); }
-            finally { isSaving = false; isTextChanged = false; }
+            finally { isSaving = false; isSizeChanged = false; isTextChanged = false; }
         }
 
         private void NoteTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -130,6 +164,7 @@ namespace Ru.Krdnet.StickyNotes
         private void NoteTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             isTextChanged = true;
+            App.backupText = NoteTextBox.Text;
         }
 
         private void NoteTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -189,6 +224,8 @@ namespace Ru.Krdnet.StickyNotes
         public void ShowErrorWindow(Exception e)
         {
             if (!Directory.Exists(App.SavePath)) Directory.CreateDirectory(App.SavePath);
+
+            File.WriteAllText(Path.Combine(App.SavePath, "error.backup"), App.backupText);
 
             File.AppendAllText(App.DebugFile, DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss INNER EXEPTION\n"));
             File.AppendAllText(App.DebugFile, e.ToString());

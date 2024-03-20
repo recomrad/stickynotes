@@ -35,6 +35,8 @@ namespace Ru.Krdnet.StickyNotes
         public static readonly string DebugFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Recomrad", "debug.log");
         public static readonly string SaveFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Recomrad", "StickyNote.save");
 
+        public static string backupText { get; set; } = string.Empty;
+
         private void AppOnStartup(object sender, StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
@@ -103,6 +105,8 @@ namespace Ru.Krdnet.StickyNotes
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
+            File.WriteAllText(Path.Combine(SavePath, "unhandled.backup"), backupText);
+            File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "unhandled.backup"), backupText);
             Exception e = (Exception)args.ExceptionObject;
             ShowErrorWindow(e);
         }
